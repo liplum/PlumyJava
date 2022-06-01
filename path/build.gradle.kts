@@ -1,10 +1,7 @@
 plugins {
     kotlin("jvm") version "1.6.10"
     java
-    `maven-publish`
 }
-version = "1.0"
-group = "plumy.path"
 sourceSets {
     main {
         java.srcDir("src")
@@ -29,10 +26,6 @@ tasks.withType<Test>().configureEach {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "net.liplum"
-            artifactId = "library"
-            version = "1.0"
-
             from(components["java"])
         }
     }
