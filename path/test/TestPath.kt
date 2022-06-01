@@ -1,5 +1,3 @@
-package plumy.test
-
 import org.junit.jupiter.api.Test
 import plumy.path.BFS
 import plumy.path.GenericPath
@@ -29,7 +27,7 @@ class TestPath {
         val finder = BSF()
         val allNodes = ArrayList<Node>()
         //test iterate all nodes
-        finder.eachVertices(root) {
+        finder.forEachVertices(root) {
             allNodes.add(it)
         }
         val allNodesString = allNodes.toString()

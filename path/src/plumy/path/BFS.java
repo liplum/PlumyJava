@@ -66,7 +66,7 @@ public interface BFS<Path extends IPath<Vert>, Vert extends Vertex<Vert>> extend
      * @param pathCons which consumes the path and destination vertex then decides whether to continue finding
      */
     @Override
-    default void findPath(Vert start, PathConsumer<Path, Vert> pathCons) {
+    default void findPath(@NotNull Vert start, @NotNull PathConsumer<Path, Vert> pathCons) {
         reset();
         pushCacheStack(start);
         tryLinkNewPointer(start, null);
@@ -102,7 +102,7 @@ public interface BFS<Path extends IPath<Vert>, Vert extends Vertex<Vert>> extend
      * @param vertCons which consumes every vertex
      */
     @Override
-    default void eachVertices(Vert start, VertexConsumer<Vert> vertCons) {
+    default void forEachVertices(@NotNull Vert start, @NotNull VertexConsumer<Vert> vertCons) {
         reset();
         pushCacheStack(start);
         tryLinkNewPointer(start, null);
