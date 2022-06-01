@@ -8,10 +8,10 @@ import java.util.*
  * @author Liplum
  * @since 1.0
  */
-open class EasyBFS<Path, Vert>(
+open class EasyBFS<Vert,Path>(
     val pointerCtor: () -> BFS.IPointer<Vert>,
     val pathCtor: () -> Path,
-) : BFS<Path, Vert>
+) : BFS<Vert,Path>
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     val stack = LinkedList<Vert>()
     val seen = HashSet<BFS.IPointer<Vert>>()

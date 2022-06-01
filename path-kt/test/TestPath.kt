@@ -39,7 +39,7 @@ class TestPathKt {
     }
 }
 
-class Graph : BFS<LinkedPath<Graph.Node>, Graph.Node>
+class Graph : BFS<Graph.Node, LinkedPath<Graph.Node>>
 by EasyBFS(::Pointer, ::LinkedPath) {
     private var id = 0
     val nodes = ArrayList<Node>()

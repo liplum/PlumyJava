@@ -2,7 +2,7 @@ package plumy.pathkt
 
 import java.util.*
 
-class LinkedPath<Vert>(
+open class LinkedPath<Vert>(
     val path: LinkedList<Vert> = LinkedList()
 ) : IPath<Vert> where Vert : IVertex<Vert> {
     override fun iterator() = path.iterator()

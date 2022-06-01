@@ -7,7 +7,7 @@ package plumy.pathkt
  * @author Liplum
  * @since 1.0
  */
-interface BFS<Path, Vert>
+interface BFS<Vert, Path>
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     /**
      * Reset all states and caches.
@@ -75,7 +75,7 @@ interface BFS<Path, Vert>
  * @param start    the start pointer
  * @param vertCons which consumes every vertex
  */
-inline fun <Path, Vert> BFS<Path, Vert>.forEachVertices(start: Vert, vertCons: (Vert) -> Unit)
+inline fun <Vert, Path> BFS<Vert, Path>.forEachVertices(start: Vert, vertCons: (Vert) -> Unit)
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
     pushCacheStack(start)
@@ -97,7 +97,7 @@ inline fun <Path, Vert> BFS<Path, Vert>.forEachVertices(start: Vert, vertCons: (
  * @param start    the start pointer
  * @param pathCons which consumes the path and destination vertex then decides whether to continue finding
  */
-inline fun <Path, Vert> BFS<Path, Vert>.findPath(start: Vert, pathCons: (Vert, Path) -> Boolean)
+inline fun <Vert, Path> BFS<Vert, Path>.findPath(start: Vert, pathCons: (Vert, Path) -> Boolean)
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
     pushCacheStack(start)
@@ -133,7 +133,7 @@ inline fun <Path, Vert> BFS<Path, Vert>.findPath(start: Vert, pathCons: (Vert, P
  * @param destination the destination of path
  * @param pathCons which consumes the path and destination vertex then decides whether to continue finding
  */
-inline fun <Path, Vert> BFS<Path, Vert>.findPath(
+inline fun <Vert, Path> BFS<Vert, Path>.findPath(
     start: Vert,
     destination: Vert,
     pathCons: (Vert, Path) -> Boolean
