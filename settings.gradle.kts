@@ -1,4 +1,4 @@
 rootProject.name = "plumy"
 include(
-    "path",
+    "path","path-kt"
 )

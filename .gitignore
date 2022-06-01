@@ -4,3 +4,5 @@
 /.gradle/
 /path/build/
 /path/build/classes/java/main/
+/path-kt/build/
+/path-kt/build/classes/java/main/

@@ -1,3 +1,7 @@
+plugins {
+    `maven-publish`
+}
+
 buildscript {
     repositories {
         mavenCentral()
@@ -8,7 +12,7 @@ buildscript {
     }
 }
 allprojects {
-    apply(plugin="maven-publish")
+    apply(plugin = "maven-publish")
     group = "net.liplum"
     version = "1.0"
     repositories {
@@ -17,9 +21,10 @@ allprojects {
             url = uri("https://www.jitpack.io")
         }
     }
-    tasks.withType<JavaCompile>{
+    tasks.withType<JavaCompile> {
         sourceCompatibility = "1.8"
         targetCompatibility = "1.8"
         options.encoding = "UTF-8"
     }
 }
+
