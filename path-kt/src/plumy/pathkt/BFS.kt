@@ -136,7 +136,7 @@ inline fun <Vert, Path> BFS<Vert, Path>.findPath(start: Vert, pathCons: (Vert, P
 inline fun <Vert, Path> BFS<Vert, Path>.findPath(
     start: Vert,
     destination: Vert,
-    pathCons: (Vert, Path) -> Boolean
+    pathCons: (Path) -> Boolean
 ) where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
     pushCacheStack(start)
@@ -160,7 +160,7 @@ inline fun <Vert, Path> BFS<Vert, Path>.findPath(
                 path.addFirst(tracePointer.self)
             }
             // If the consumer thinks the finding is ended, stop this finding
-            if (pathCons(next, path)) break
+            if (pathCons(path)) break
         }
     }
 }

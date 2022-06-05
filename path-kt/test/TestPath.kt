@@ -30,7 +30,7 @@ class TestPathKt {
         }
         val start = graph.nodes.find { it.name == "sub3-3" }!!
         val end = graph.nodes.find { it.name == "sub1-sub2-1" }!!
-        graph.findPath(start, end) { _, path ->
+        graph.findPath(start, end) { path ->
             val str = path.joinToString("->")
             println(str)
             assert(str == "sub3-3->sub3->root->sub1->sub1-sub2->sub1-sub2-1")
