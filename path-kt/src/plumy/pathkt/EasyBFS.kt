@@ -13,13 +13,20 @@ open class EasyBFS<Vert,Path>(
     val pathCtor: () -> Path,
 ) : BFS<Vert,Path>
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
+    /**
+     * It used to customize the clear behavior.
+     * Useful when you're using object pool.
+     */
+    var clearSeen :EasyBFS<Vert,Path>.()->Unit= {
+        seen.clear()
+    }
     val stack = LinkedList<Vert>()
     val seen = HashSet<BFS.IPointer<Vert>>()
     val vert2Pointer = HashMap<Vert, BFS.IPointer<Vert>>()
     var currentDestination: Vert? = null
     override fun reset() {
-        seen.clear()
         stack.clear()
+        clearSeen()
         vert2Pointer.clear()
     }
 
