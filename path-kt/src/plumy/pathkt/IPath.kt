@@ -29,3 +29,21 @@ interface IPath<Vert> : Iterable<Vert>
      */
     val destination: Vert
 }
+/**
+ * An abstract path. To iterate this will get all vertices from start point to destination.
+ *
+ * @author Liplum
+ * @since 1.0
+ */
+interface ISizedPath<Vert> : IPath<Vert>
+        where Vert : IVertex<Vert> {
+    val size: Int
+}
+
+fun <Vert> ISizedPath<Vert>.isEmpty(): Boolean
+        where Vert : IVertex<Vert> =
+    size == 0
+
+fun <Vert> ISizedPath<Vert>.isNotEmpty(): Boolean
+        where Vert : IVertex<Vert> =
+    size > 0

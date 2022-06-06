@@ -2,10 +2,17 @@ package plumy.pathkt
 
 import java.util.*
 
+/**
+ * A path using [LinkedList].
+ * @author Liplum
+ * @since 1.0
+ */
 open class LinkedPath<Vert>(
-    val path: LinkedList<Vert> = LinkedList()
-) : IPath<Vert> where Vert : IVertex<Vert> {
+    val path: LinkedList<Vert> = LinkedList(),
+) : ISizedPath<Vert> where Vert : IVertex<Vert> {
     override fun iterator() = path.iterator()
+    fun descendingIterator(): MutableIterator<Vert> = path.descendingIterator()
+    fun listIterator(): MutableListIterator<Vert> = path.listIterator()
     override fun addFirst(head: Vert) {
         path.addFirst(head)
     }
@@ -13,20 +20,33 @@ open class LinkedPath<Vert>(
     override fun addLast(tail: Vert) {
         path.addLast(tail)
     }
-    val size :Int
+
+    operator fun get(index: Int) =
+        path[index]
+
+    operator fun set(index: Int, vert: Vert) {
+        path[index] = vert
+    }
+
+    override val size: Int
         get() = path.size
     override val start: Vert
         get() = path.first
     override val destination: Vert
         get() = path.last
 }
-
+/**
+ * A path using [ArrayList].
+ * @author Liplum
+ * @since 1.0
+ */
 open class ArrayPath<Vert>(
-    val path: ArrayList<Vert> = ArrayList()
-) : IPath<Vert> where Vert : IVertex<Vert> {
+    val path: ArrayList<Vert> = ArrayList(),
+) : ISizedPath<Vert> where Vert : IVertex<Vert> {
     constructor(capacity: Int) : this(ArrayList(capacity))
 
     override fun iterator() = path.iterator()
+    fun listIterator() = path.listIterator()
     override fun addFirst(head: Vert) {
         path.add(0, head)
     }
@@ -34,10 +54,43 @@ open class ArrayPath<Vert>(
     override fun addLast(tail: Vert) {
         path.add(tail)
     }
-    val size :Int
+
+    operator fun get(index: Int) =
+        path[index]
+
+    operator fun set(index: Int, vert: Vert) {
+        path[index] = vert
+    }
+
+    override val size: Int
         get() = path.size
     override val start: Vert
         get() = path.first()
     override val destination: Vert
         get() = path.last()
+}
+/**
+ * An array path but [addFirst] is swap with [addLast].
+ * It's useful when some algorithms often use [addFirst]
+ * @author Liplum
+ * @since 1.0
+ */
+open class ReversedArrayPath<Vert>(
+    path: ArrayList<Vert> = ArrayList(),
+) : ArrayPath<Vert>(path) where Vert : IVertex<Vert> {
+    constructor(capacity: Int) : this(ArrayList(capacity))
+
+    override fun addFirst(head: Vert) {
+        path.add(head)
+    }
+
+    override fun addLast(tail: Vert) {
+        path.add(0, tail)
+    }
+    /**
+     * Reverse this path.
+     */
+    fun reverse() {
+        path.reverse()
+    }
 }

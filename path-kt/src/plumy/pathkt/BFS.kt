@@ -70,10 +70,12 @@ interface BFS<Vert, Path>
     }
 }
 /**
- * Iterate all vertices started with the start point given.
+ * Iterate all vertices started with the [start] point given.
  *
  * @param start    the start pointer
  * @param vertCons which consumes every vertex
+ * @author Liplum
+ * @since 1.0
  */
 inline fun <Vert, Path> BFS<Vert, Path>.forEachVertices(start: Vert, vertCons: (Vert) -> Unit)
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
@@ -91,11 +93,13 @@ inline fun <Vert, Path> BFS<Vert, Path>.forEachVertices(start: Vert, vertCons: (
     }
 }
 /**
- * Find all paths between the `start` point and destination.
+ * Find all paths between the [start] point and destination.
  * The concrete finding behavior is implemented by the subclass.
  *
  * @param start    the start pointer
  * @param pathCons which consumes the path and destination vertex then decides whether to continue finding
+ * @author Liplum
+ * @since 1.0
  */
 inline fun <Vert, Path> BFS<Vert, Path>.findPath(start: Vert, pathCons: (Vert, Path) -> Boolean)
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
@@ -126,17 +130,19 @@ inline fun <Vert, Path> BFS<Vert, Path>.findPath(start: Vert, pathCons: (Vert, P
     }
 }
 /**
- * Find all paths between the `start` point and destination.
+ * Find all paths between the [start] and [destination].
  * The concrete finding behavior is implemented by the subclass.
  *
  * @param start    the start pointer
  * @param destination the destination of path
  * @param pathCons which consumes the path and destination vertex then decides whether to continue finding
+ * @author Liplum
+ * @since 1.0
  */
 inline fun <Vert, Path> BFS<Vert, Path>.findPath(
     start: Vert,
     destination: Vert,
-    pathCons: (Path) -> Boolean
+    pathCons: (Path) -> Boolean,
 ) where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
     pushCacheStack(start)
@@ -163,4 +169,89 @@ inline fun <Vert, Path> BFS<Vert, Path>.findPath(
             if (pathCons(path)) break
         }
     }
+}
+/**
+ * Find the first path between the [start] point and [destination].
+ * The concrete finding behavior is implemented by the subclass.
+ *
+ * @param start    the start pointer
+ * @param destination the destination of path
+ * @return the first found path or an empty path(but not null) if there is no path
+ * @author Liplum
+ * @since 1.0
+ */
+fun <Vert, Path> BFS<Vert, Path>.findFirstPath(
+    start: Vert,
+    destination: Vert,
+): Path where Vert : IVertex<Vert>, Path : IPath<Vert> {
+    reset()
+    pushCacheStack(start)
+    tryLinkNewPointer(start, null)
+    while (true) {
+        val next = popCacheStack() ?: break
+        val pointer: BFS.IPointer<Vert> = getLinkedPointer(next)
+        for (vert in next.linkedVertices) {
+            if (tryLinkNewPointer(vert, pointer)) {
+                pushCacheStack(vert)
+            }
+        }
+        // Check if current pointer is the destination.
+        if (next == destination) {
+            var tracePointer: BFS.IPointer<Vert>? = pointer
+            val path = createPath()
+            path.addFirst(pointer.self)
+            while (true) {
+                tracePointer = tracePointer?.previous
+                if (tracePointer == null) break
+                path.addFirst(tracePointer.self)
+            }
+            // If the consumer thinks the finding is ended, stop this finding
+            return path
+        }
+    }
+    return createPath()
+}
+/**
+ * Find the shortest path between the [start] and [destination].
+ * The concrete finding behavior is implemented by the subclass.
+ *
+ * @param start    the start pointer
+ * @param destination the destination of path
+ * @return the shortest path or an empty path(but not null) if there is no path
+ * @author Liplum
+ * @since 1.0
+ */
+fun <Vert, Path> BFS<Vert, Path>.findShortestPath(
+    start: Vert,
+    destination: Vert,
+): Path where Vert : IVertex<Vert>, Path : ISizedPath<Vert> {
+    reset()
+    pushCacheStack(start)
+    tryLinkNewPointer(start, null)
+    var shortestPath: Path? = null
+    while (true) {
+        val next = popCacheStack() ?: break
+        val pointer: BFS.IPointer<Vert> = getLinkedPointer(next)
+        for (vert in next.linkedVertices) {
+            if (tryLinkNewPointer(vert, pointer)) {
+                pushCacheStack(vert)
+            }
+        }
+        // Check if current pointer is the destination.
+        if (next == destination) {
+            var tracePointer: BFS.IPointer<Vert>? = pointer
+            val path = createPath()
+            path.addFirst(pointer.self)
+            while (true) {
+                tracePointer = tracePointer?.previous
+                if (tracePointer == null) break
+                path.addFirst(tracePointer.self)
+            }
+            // If the consumer thinks the finding is ended, stop this finding
+            shortestPath = if (shortestPath == null) path
+            else if (path.isNotEmpty() && path.size < shortestPath.size) path
+            else shortestPath
+        }
+    }
+    return shortestPath ?: createPath()
 }

@@ -8,16 +8,16 @@ import java.util.*
  * @author Liplum
  * @since 1.0
  */
-open class EasyBFS<Vert,Path>(
+open class EasyBFS<Vert, Path>(
     val pointerCtor: () -> BFS.IPointer<Vert>,
     val pathCtor: () -> Path,
-) : BFS<Vert,Path>
+) : BFS<Vert, Path>
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     /**
      * It used to customize the clear behavior.
      * Useful when you're using object pool.
      */
-    var clearSeen :EasyBFS<Vert,Path>.()->Unit= {
+    var clearSeen: EasyBFS<Vert, Path>.() -> Unit = {
         seen.clear()
     }
     val stack = LinkedList<Vert>()
