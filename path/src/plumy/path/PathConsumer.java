@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public interface PathConsumer<Path extends IPath<Vert>, Vert extends Vertex<Vert>> {
     /**
      * Accept a finding result and decide whether continue to find other paths.
-     * @param destination the destination which meets {@linkplain PathFinder#isDestination(Vertex, Vertex)}
+     * @param destination the destination which meets {@linkplain VertContainer#isDestination(Vertex, Vertex)}
      * @param path        the whole path between start point and destination
      * @return whether to stop this path finding.
      */

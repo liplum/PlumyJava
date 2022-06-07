@@ -18,20 +18,20 @@ public class BFS {
             @NotNull PathConsumer<Path, Vert> pathCons
     ) {
         c.reset();
-        c.pushCache(start);
+        c.addCache(start);
         c.tryLinkNewPointer(start, null);
 
         Vert next;
         while ((next = c.pollCache()) != null) {
-            VertContainer.Pointer<Vert> pointer = c.getLinkedPointer(next);
+            Pointer<Vert> pointer = c.getLinkedPointer(next);
             for (Vert vert : next.getLinkedVertices()) {
                 if (c.tryLinkNewPointer(vert, pointer)) {
-                    c.pushCache(vert);
+                    c.addCache(vert);
                 }
             }
             // Check if current pointer is the destination.
             if (c.isDestination(start, next)) {
-                VertContainer.Pointer<Vert> tracePointer = pointer;
+                Pointer<Vert> tracePointer = pointer;
                 Path path = c.createPath();
                 path.addFirst(pointer.self);
 
@@ -59,20 +59,20 @@ public class BFS {
             @NotNull Vert destination
     ) {
         c.reset();
-        c.pushCache(start);
+        c.addCache(start);
         c.tryLinkNewPointer(start, null);
 
         Vert next;
         while ((next = c.pollCache()) != null) {
-            VertContainer.Pointer<Vert> pointer = c.getLinkedPointer(next);
+            Pointer<Vert> pointer = c.getLinkedPointer(next);
             for (Vert vert : next.getLinkedVertices()) {
                 if (c.tryLinkNewPointer(vert, pointer)) {
-                    c.pushCache(vert);
+                    c.addCache(vert);
                 }
             }
             // Check if current pointer is the destination.
             if (c.isDestination(start, next)) {
-                VertContainer.Pointer<Vert> tracePointer = pointer;
+                Pointer<Vert> tracePointer = pointer;
                 Path path = c.createPath();
                 path.addFirst(pointer.self);
 
@@ -98,14 +98,14 @@ public class BFS {
             @NotNull VertexConsumer<Vert> vertCons
     ) {
         c.reset();
-        c.pushCache(start);
+        c.addCache(start);
         c.tryLinkNewPointer(start, null);
 
         Vert v;
         while ((v = c.pollCache()) != null) {
             for (Vert vert : v.getLinkedVertices()) {
                 if (c.tryLinkNewPointer(vert, null)) {
-                    c.pushCache(vert);
+                    c.addCache(vert);
                 }
             }
             vertCons.accept(v);

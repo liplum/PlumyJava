@@ -48,7 +48,7 @@ class Node(val name: String) : Vertex<Node> {
     constructor() : this(id++.toString())
 
     val links = ArrayList<Node>()
-    var pointer: VertContainer.Pointer<Node>? = null
+    var pointer: Pointer<Node>? = null
     override fun getLinkedVertices() = links
     operator fun plusAssign(sub: Node) {
         links.add(sub)
@@ -75,7 +75,7 @@ inline fun Node.sub(name: String? = null, genSub: Node.() -> Unit = {}): Node {
 
 class Graph : VertContainer<LinkedPath<Node>, Node> {
     val queue = LinkedList<Node>()
-    val seen = HashSet<VertContainer.Pointer<Node>>()
+    val seen = HashSet<Pointer<Node>>()
     lateinit var curDestination: Node
     override fun reset() {
         seen.clear()
@@ -93,18 +93,22 @@ class Graph : VertContainer<LinkedPath<Node>, Node> {
     override fun isDestination(origin: Node, vert: Node): Boolean =
         vert == curDestination
 
-    override fun tryLinkNewPointer(linked: Node, itsPrevious: VertContainer.Pointer<Node>?): Boolean {
+    override fun tryLinkNewPointer(linked: Node, itsPrevious: Pointer<Node>?): Boolean {
         if (linked.pointer == null) {
-            linked.pointer = VertContainer.Pointer(linked, itsPrevious)
+            linked.pointer = Pointer(linked, itsPrevious)
             return true
         }
         return false
     }
 
-    override fun getLinkedPointer(vert: Node): VertContainer.Pointer<Node> =
+    override fun getLinkedPointer(vert: Node): Pointer<Node> =
         vert.pointer!!
 
     override fun pollCache(): Node? =
         if (queue.isEmpty()) null
         else queue.poll()
+
+    override fun addCache(newVertex: Node) {
+        queue.addLast(newVertex)
+    }
 }

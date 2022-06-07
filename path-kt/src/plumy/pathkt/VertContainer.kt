@@ -37,7 +37,7 @@ interface VertContainer<Vert, Path>
      */
     fun popCache(): Vert?
     /**
-     * Push a vertex into this cache. It can be used as a FILO stack.<br></br>
+     * Push a vertex into this cache at head. It can be used as a FILO stack.<br></br>
      * It may be used in DFS.
      *
      * @param newVertex a vertex to be pushed
@@ -50,6 +50,13 @@ interface VertContainer<Vert, Path>
      * @return the polled or null if cache is empty
      */
     fun pollCache(): Vert?
+    /**
+     * Add a vertex into this cache at tail. It can be used as a FIFO queue.<br></br>
+     * It may be used in BFS.
+     *
+     * @param newVertex a vertex to be added
+     */
+    fun addCache(newVertex: Vert)
     /**
      * Check whether the subject is the destination.
      *

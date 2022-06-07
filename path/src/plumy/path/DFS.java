@@ -23,7 +23,7 @@ public class DFS {
 
         Vert next;
         while ((next = c.popCache()) != null) {
-            VertContainer.Pointer<Vert> pointer = c.getLinkedPointer(next);
+            Pointer<Vert> pointer = c.getLinkedPointer(next);
             for (Vert vert : next.getLinkedVertices()) {
                 if (c.tryLinkNewPointer(vert, pointer)) {
                     c.pushCache(vert);
@@ -31,7 +31,7 @@ public class DFS {
             }
             // Check if current pointer is the destination.
             if (c.isDestination(start, next)) {
-                VertContainer.Pointer<Vert> tracePointer = pointer;
+                Pointer<Vert> tracePointer = pointer;
                 Path path = c.createPath();
                 path.addFirst(pointer.self);
 
@@ -64,7 +64,7 @@ public class DFS {
 
         Vert next;
         while ((next = c.popCache()) != null) {
-            VertContainer.Pointer<Vert> pointer = c.getLinkedPointer(next);
+            Pointer<Vert> pointer = c.getLinkedPointer(next);
             for (Vert vert : next.getLinkedVertices()) {
                 if (c.tryLinkNewPointer(vert, pointer)) {
                     c.pushCache(vert);
@@ -72,7 +72,7 @@ public class DFS {
             }
             // Check if current pointer is the destination.
             if (c.isDestination(start, next)) {
-                VertContainer.Pointer<Vert> tracePointer = pointer;
+                Pointer<Vert> tracePointer = pointer;
                 Path path = c.createPath();
                 path.addFirst(pointer.self);
 

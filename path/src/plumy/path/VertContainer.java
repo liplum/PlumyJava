@@ -72,6 +72,14 @@ public interface VertContainer
     Vert pollCache();
 
     /**
+     * Add a vertex into this cache at tail. It can be used as a FIFO queue.<br></br>
+     * It may be used in BFS.
+     *
+     * @param newVertex a vertex to be added
+     */
+    void addCache(@NotNull Vert newVertex);
+
+    /**
      * Create a new path.
      *
      * @return the path object
@@ -79,29 +87,4 @@ public interface VertContainer
      */
     @NotNull
     Path createPath();
-
-    /**
-     * The linked list-like pointers. The destination's pointer can trace back the start point.
-     */
-    class Pointer<Vert> {
-        /**
-         * The Previous pointer or null if {@linkplain Pointer#self self} is a start point.
-         */
-        @Nullable
-        public Pointer<Vert> previous;
-        /**
-         * The vertex saved
-         */
-        @NotNull
-        public Vert self;
-
-        /**
-         * @param self     the vertex saved
-         * @param previous its previous pointer or null if this is a start point.
-         */
-        public Pointer(@NotNull Vert self, @Nullable Pointer<Vert> previous) {
-            this.previous = previous;
-            this.self = self;
-        }
-    }
 }

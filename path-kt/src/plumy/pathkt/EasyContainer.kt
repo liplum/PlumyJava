@@ -20,12 +20,12 @@ open class EasyContainer<Vert, Path>(
     var clearSeen: EasyContainer<Vert, Path>.() -> Unit = {
         seen.clear()
     }
-    val stack = LinkedList<Vert>()
+    val list = LinkedList<Vert>()
     val seen = HashSet<IPointer<Vert>>()
     val vert2Pointer = HashMap<Vert, IPointer<Vert>>()
     var currentDestination: Vert? = null
     override fun reset() {
-        stack.clear()
+        list.clear()
         clearSeen()
         vert2Pointer.clear()
     }
@@ -50,14 +50,18 @@ open class EasyContainer<Vert, Path>(
         pathCtor()
 
     override fun popCache(): Vert? =
-        if (stack.isEmpty()) null
-        else stack.pop()
+        if (list.isEmpty()) null
+        else list.pop()
 
     override fun pushCache(newVertex: Vert) {
-        stack.push(newVertex)
+        list.push(newVertex)
     }
 
     override fun pollCache(): Vert? =
-        if (stack.isEmpty()) null
-        else stack.poll()
+        if (list.isEmpty()) null
+        else list.poll()
+
+    override fun addCache(newVertex: Vert) {
+        list.addLast(newVertex)
+    }
 }

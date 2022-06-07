@@ -11,13 +11,13 @@ package plumy.pathkt
 inline fun <Vert, Path> VertContainer<Vert, Path>.forEachVerticesBFS(start: Vert, vertCons: (Vert) -> Unit)
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
-    pushCache(start)
+    addCache(start)
     tryLinkNewPointer(start, null)
     while (true) {
         val v = pollCache() ?: break
         for (vert in v.linkedVertices) {
             if (tryLinkNewPointer(vert, null)) {
-                pushCache(vert)
+                addCache(vert)
             }
         }
         vertCons(v)
@@ -38,14 +38,14 @@ inline fun <Vert, Path> VertContainer<Vert, Path>.forEachVerticesBFS(start: Vert
 inline fun <Vert, Path> VertContainer<Vert, Path>.findPathsBFS(start: Vert, pathCons: (Vert, Path) -> Boolean)
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
-    pushCache(start)
+    addCache(start)
     tryLinkNewPointer(start, null)
     while (true) {
         val next = pollCache() ?: break
         val pointer: IPointer<Vert> = getLinkedPointer(next)
         for (vert in next.linkedVertices) {
             if (tryLinkNewPointer(vert, pointer)) {
-                pushCache(vert)
+                addCache(vert)
             }
         }
         // Check if current pointer is the destination.
@@ -78,14 +78,14 @@ fun <Vert, Path> VertContainer<Vert, Path>.findPathBFS(
     destination: Vert,
 ): Path where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
-    pushCache(start)
+    addCache(start)
     tryLinkNewPointer(start, null)
     while (true) {
         val next = pollCache() ?: break
         val pointer: IPointer<Vert> = getLinkedPointer(next)
         for (vert in next.linkedVertices) {
             if (tryLinkNewPointer(vert, pointer)) {
-                pushCache(vert)
+                addCache(vert)
             }
         }
         // Check if current pointer is the destination.
