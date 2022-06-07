@@ -1,8 +1,5 @@
 import org.junit.jupiter.api.Test
-import plumy.path.BFS
-import plumy.path.GenericPath
-import plumy.path.IPath
-import plumy.path.Vertex
+import plumy.path.*
 import java.util.*
 
 class TestPath {
@@ -24,10 +21,10 @@ class TestPath {
                 sub("sub3-3")
             }
         }
-        val finder = BSF()
+        val graph = Graph()
         val allNodes = ArrayList<Node>()
         //test iterate all nodes
-        finder.forEachVertices(root) {
+        BFS.forEachVertices(graph, root) {
             allNodes.add(it)
         }
         val allNodesString = allNodes.toString()
@@ -38,12 +35,12 @@ class TestPath {
         val end = allNodes.find { it.name == "sub1-sub2-1" }!!
         val allPaths = ArrayList<IPath<Node>>()
         // test find
-        finder.curDestination = end
-        finder.findPath(start) { _, path -> allPaths.add(path) }
-        assert(allPaths.size == 1)
-        val pathString = allPaths[0].joinToString("->")
-        println(pathString)
-        assert(pathString == "sub3-3->sub3->direct->sub1->sub1-sub2->sub1-sub2-1")
+        graph.curDestination = end
+        BFS.findPaths(graph, start) { _, path ->
+            println(path.path.joinToString("->"))
+            allPaths.add(path)
+            true
+        }
     }
 }
 
@@ -51,7 +48,7 @@ class Node(val name: String) : Vertex<Node> {
     constructor() : this(id++.toString())
 
     val links = ArrayList<Node>()
-    var pointer: BFS.Pointer<Node>? = null
+    var pointer: VertContainer.Pointer<Node>? = null
     override fun getLinkedVertices() = links
     operator fun plusAssign(sub: Node) {
         links.add(sub)
@@ -62,6 +59,10 @@ class Node(val name: String) : Vertex<Node> {
     }
 
     override fun toString() = name
+    fun connectTo(node: Node) {
+        this.linkedVertices.add(node)
+        node.linkedVertices.add(this)
+    }
 }
 
 inline fun Node.sub(name: String? = null, genSub: Node.() -> Unit = {}): Node {
@@ -72,35 +73,38 @@ inline fun Node.sub(name: String? = null, genSub: Node.() -> Unit = {}): Node {
     return this
 }
 
-class BSF : BFS<GenericPath<Node>, Node> {
+class Graph : VertContainer<LinkedPath<Node>, Node> {
     val queue = LinkedList<Node>()
-    val seen = HashSet<BFS.Pointer<Node>>()
+    val seen = HashSet<VertContainer.Pointer<Node>>()
     lateinit var curDestination: Node
     override fun reset() {
         seen.clear()
         queue.clear()
     }
 
-    override fun popCacheStack(): Node? =
-        if (queue.isEmpty()) null
-        else queue.pop()
+    override fun popCache(): Node =
+        throw NotImplementedError("BFS doesn't need to implement this.")
 
-    override fun pushCacheStack(newVertex: Node) {
+    override fun pushCache(newVertex: Node) {
         queue.add(newVertex)
     }
 
-    override fun createPath(): GenericPath<Node> = GenericPath()
+    override fun createPath(): LinkedPath<Node> = LinkedPath()
     override fun isDestination(origin: Node, vert: Node): Boolean =
         vert == curDestination
 
-    override fun tryLinkNewPointer(linked: Node, itsPrevious: BFS.Pointer<Node>?): Boolean {
+    override fun tryLinkNewPointer(linked: Node, itsPrevious: VertContainer.Pointer<Node>?): Boolean {
         if (linked.pointer == null) {
-            linked.pointer = BFS.Pointer(linked, itsPrevious)
+            linked.pointer = VertContainer.Pointer(linked, itsPrevious)
             return true
         }
         return false
     }
 
-    override fun getLinkedPointer(vert: Node): BFS.Pointer<Node> =
+    override fun getLinkedPointer(vert: Node): VertContainer.Pointer<Node> =
         vert.pointer!!
+
+    override fun pollCache(): Node? =
+        if (queue.isEmpty()) null
+        else queue.poll()
 }

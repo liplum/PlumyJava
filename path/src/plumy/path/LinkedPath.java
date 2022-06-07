@@ -10,7 +10,7 @@ import java.util.LinkedList;
  * @author EBwilson
  * @since 1.0
  */
-public class GenericPath<Vert extends Vertex<Vert>> implements IPath<Vert> {
+public class LinkedPath<Vert extends Vertex<Vert>> implements IPath<Vert> {
     public final LinkedList<Vert> path = new LinkedList<>();
 
     @Override

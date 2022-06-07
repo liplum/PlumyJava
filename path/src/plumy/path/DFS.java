@@ -2,7 +2,7 @@ package plumy.path;
 
 import org.jetbrains.annotations.NotNull;
 
-public class BFS {
+public class DFS {
     /**
      * Find a path between the {@code start} point and {@linkplain VertContainer#isDestination(Vertex, Vertex) destination}.<br/>
      * The finding depends on the {@linkplain VertContainer#isDestination(Vertex, Vertex) destination},
@@ -22,7 +22,7 @@ public class BFS {
         c.tryLinkNewPointer(start, null);
 
         Vert next;
-        while ((next = c.pollCache()) != null) {
+        while ((next = c.popCache()) != null) {
             VertContainer.Pointer<Vert> pointer = c.getLinkedPointer(next);
             for (Vert vert : next.getLinkedVertices()) {
                 if (c.tryLinkNewPointer(vert, pointer)) {
@@ -63,7 +63,7 @@ public class BFS {
         c.tryLinkNewPointer(start, null);
 
         Vert next;
-        while ((next = c.pollCache()) != null) {
+        while ((next = c.popCache()) != null) {
             VertContainer.Pointer<Vert> pointer = c.getLinkedPointer(next);
             for (Vert vert : next.getLinkedVertices()) {
                 if (c.tryLinkNewPointer(vert, pointer)) {
@@ -102,7 +102,7 @@ public class BFS {
         c.tryLinkNewPointer(start, null);
 
         Vert v;
-        while ((v = c.pollCache()) != null) {
+        while ((v = c.popCache()) != null) {
             for (Vert vert : v.getLinkedVertices()) {
                 if (c.tryLinkNewPointer(vert, null)) {
                     c.pushCache(vert);

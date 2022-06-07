@@ -8,7 +8,7 @@ package plumy.pathkt
  * @author Liplum
  * @since 1.0
  */
-inline fun <Vert, Path> VertContainer<Vert, Path>.forEachVerticesBFS(start: Vert, vertCons: (Vert) -> Unit)
+inline fun <Vert, Path> VertContainer<Vert, Path>.forEachVerticesDFS(start: Vert, vertCons: (Vert) -> Unit)
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
     pushCache(start)
@@ -35,7 +35,7 @@ inline fun <Vert, Path> VertContainer<Vert, Path>.forEachVerticesBFS(start: Vert
  * @author Liplum
  * @since 1.0
  */
-inline fun <Vert, Path> VertContainer<Vert, Path>.findPathsBFS(start: Vert, pathCons: (Vert, Path) -> Boolean)
+inline fun <Vert, Path> VertContainer<Vert, Path>.findPathsDFS(start: Vert, pathCons: (Vert, Path) -> Boolean)
         where Vert : IVertex<Vert>, Path : IPath<Vert> {
     reset()
     pushCache(start)
@@ -73,7 +73,7 @@ inline fun <Vert, Path> VertContainer<Vert, Path>.findPathsBFS(start: Vert, path
  * @author Liplum
  * @since 1.0
  */
-fun <Vert, Path> VertContainer<Vert, Path>.findPathBFS(
+fun <Vert, Path> VertContainer<Vert, Path>.findPathDFS(
     start: Vert,
     destination: Vert,
 ): Path where Vert : IVertex<Vert>, Path : IPath<Vert> {

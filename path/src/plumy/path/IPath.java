@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
  * An abstract path. To iterate this will get all vertices from start point to destination.
  *
  * @author EBwilson
- * @see GenericPath
+ * @see LinkedPath
  * @see Vertex
  * @since 1.0
  */

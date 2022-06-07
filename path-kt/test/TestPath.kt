@@ -22,6 +22,7 @@ class TestPathKt {
                 }
             }
         }
+        val sub1 = graph.nodes.find { it.name == "sub1" }!!
         LinkedList<Graph.Node>().apply {
             graph.collectAllNodes(this)
             assert(this.size == graph.nodes.size)
@@ -30,29 +31,28 @@ class TestPathKt {
         }
         val start = graph.nodes.find { it.name == "sub3-3" }!!
         val end = graph.nodes.find { it.name == "sub1-sub2-1" }!!
-        graph.findPath(start, end) { path ->
+        end.connectTo(sub1)
+        graph.findPathBFS(start, end).let { path ->
             val str = path.joinToString("->")
             println(str)
-            assert(str == "sub3-3->sub3->root->sub1->sub1-sub2->sub1-sub2-1")
-            true
         }
     }
 }
 
-class Graph : BFS<Graph.Node, LinkedPath<Graph.Node>>
-by EasyBFS(::Pointer, ::LinkedPath) {
+class Graph : VertContainer<Graph.Node, LinkedPath<Graph.Node>>
+by EasyContainer(::Pointer, ::LinkedPath) {
     private var id = 0
     val nodes = ArrayList<Node>()
     lateinit var root: Node
     fun collectAllNodes(list: MutableList<Node>) {
-        forEachVertices(root) {
+        forEachVerticesBFS(root) {
             list.add(it)
         }
     }
 
-    class Pointer : BFS.IPointer<Graph.Node> {
+    class Pointer : IPointer<Graph.Node> {
         override lateinit var self: Node
-        override var previous: BFS.IPointer<Node>? = null
+        override var previous: IPointer<Node>? = null
     }
 
     inner class Node(val name: String) : IVertex<Node> {
@@ -60,6 +60,11 @@ by EasyBFS(::Pointer, ::LinkedPath) {
             if (id == 0) root = this
             nodes.add(this)
             id++
+        }
+
+        fun connectTo(node: Node) {
+            this.linkedVertices.add(node)
+            node.linkedVertices.add(this)
         }
 
         override val linkedVertices = ArrayList<Node>()
