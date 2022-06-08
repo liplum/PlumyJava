@@ -34,6 +34,7 @@ open class LinkedPath<Vert>(
         get() = path.first
     override val destination: Vert
         get() = path.last
+    override fun toString() = path.toString()
 }
 /**
  * A path using [ArrayList].
@@ -68,6 +69,7 @@ open class ArrayPath<Vert>(
         get() = path.first()
     override val destination: Vert
         get() = path.last()
+    override fun toString() = path.toString()
 }
 /**
  * An array path but [addFirst] is swap with [addLast].
@@ -93,4 +95,6 @@ open class ReversedArrayPath<Vert>(
     fun reverse() {
         path.reverse()
     }
+
+    override fun toString() = path.toString()
 }
