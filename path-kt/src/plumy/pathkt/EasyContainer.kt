@@ -17,17 +17,15 @@ open class EasyContainer<Vert, Path>(
      * It used to customize the clear behavior.
      * Useful when you're using object pool.
      */
-    var clearSeen: EasyContainer<Vert, Path>.() -> Unit = {
-        seen.clear()
+    var clearVert2Pointer: EasyContainer<Vert, Path>.() -> Unit = {
+        vert2Pointer.clear()
     }
     val list = LinkedList<Vert>()
-    val seen = HashSet<IPointer<Vert>>()
     val vert2Pointer = HashMap<Vert, IPointer<Vert>>()
     var currentDestination: Vert? = null
     override fun reset() {
         list.clear()
-        clearSeen()
-        vert2Pointer.clear()
+        clearVert2Pointer()
     }
 
     override fun tryLinkNewPointer(linked: Vert, itsPrevious: IPointer<Vert>?): Boolean =
