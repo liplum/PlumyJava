@@ -14,20 +14,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 }
-val sourcesJar by tasks.creating(Jar::class) {
-    dependsOn(JavaPlugin.CLASSES_TASK_NAME)
-    archiveClassifier.set("sources")
-    from(sourceSets["main"].allSource)
-}
-/* val javadocJar by tasks.creating(Jar::class) {
-      dependsOn(JavaPlugin.JAVADOC_TASK_NAME)
-      archiveClassifier.set("javadoc")
-      from(javadoc)
-  }*/
-artifacts {
-    add("archives", sourcesJar)
-    //add("archives", javadocJar)
-}
 tasks {
     withType<Test>().configureEach {
         useJUnitPlatform {
@@ -38,14 +24,14 @@ tasks {
         }
     }
 }
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
 publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
-            afterEvaluate {
-                artifact(sourcesJar)
-                //artifact(javadocJar)
-            }
         }
     }
 }

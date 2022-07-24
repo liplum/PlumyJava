@@ -61,6 +61,7 @@ interface VertContainer<Vert, Path>
      * Check whether the subject is the destination.
      *
      * @param start   the start point
+     *
      * @param subject a vertex to be checked if it's the destination.
      * @return whether the subject is the destination of the start point.
      */
